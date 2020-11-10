@@ -10,8 +10,6 @@
 # script does, it compares all of the sequences within a cluster and decides if it
 # is a mixed or "pure" cluster with regards to each of the characteristics. 
 
-# As of 06/11/2020, this is only for POL 1.5% GD clusters. 
-
 setwd("~/Documents/PhD/Data/aim_1/SEARCH_clustering")
 
 # Libraries ----
@@ -131,6 +129,8 @@ characterise.clusters <- function(x){
   {
     if (nrow(list[[i]]) == 2){
       
+      cluster_size <- nrow(list[[i]])
+      
       cluster_sex <- ifelse(list[[i]]$Gender[1] == list[[i]]$Gender[2] & 
                               list[[i]]$Gender[1] =="Male", "Same-sex cluster (Male)", 
                             ifelse(list[[i]]$Gender[1] == list[[i]]$Gender[2] & 
@@ -178,9 +178,11 @@ characterise.clusters <- function(x){
                                                               list[[i]]$REGA_subtype[1] == "A1,D", "A1,D cluster",
                                                             "Other recombinant cluster")))))
       
-      cluster[[i]] <- data.frame(cluster_sex, cluster_status, cluster_region, cluster_community, cluster_age, cluster_occupation, cluster_group, cluster_subtype)
+      cluster[[i]] <- data.frame(cluster_size, cluster_sex, cluster_status, cluster_region, cluster_community, cluster_age, cluster_occupation, cluster_group, cluster_subtype)
       
     } else {if (nrow(list[[i]]) == 3){
+      
+      cluster_size <- nrow(list[[i]])
       
       cluster_sex <- ifelse(list[[i]]$Gender[1] == list[[i]]$Gender[2] & 
                               list[[i]]$Gender[1] == list[[i]]$Gender[3] & 
@@ -246,9 +248,11 @@ characterise.clusters <- function(x){
                                                               list[[i]]$REGA_subtype[1] == "A1,D", "A1,D cluster",
                                                             "Other recombinant cluster")))))
       
-      cluster[[i]] <- data.frame(cluster_sex, cluster_status, cluster_region, cluster_community, cluster_age, cluster_occupation, cluster_group, cluster_subtype)
+      cluster[[i]] <- data.frame(cluster_size, cluster_sex, cluster_status, cluster_region, cluster_community, cluster_age, cluster_occupation, cluster_group, cluster_subtype)
       
     } else {if (nrow(list[[i]]) == 4){
+      
+      cluster_size <- nrow(list[[i]])
       
       cluster_sex <- ifelse(list[[i]]$Gender[1] == list[[i]]$Gender[2] & 
                               list[[i]]$Gender[1] == list[[i]]$Gender[3] & 
@@ -331,9 +335,11 @@ characterise.clusters <- function(x){
                                                               list[[i]]$REGA_subtype[1] == "A1,D", "A1,D cluster",
                                                             "Other recombinant cluster")))))
       
-      cluster[[i]] <- data.frame(cluster_sex, cluster_status, cluster_region, cluster_community, cluster_age, cluster_occupation, cluster_group, cluster_subtype)
+      cluster[[i]] <- data.frame(cluster_size, cluster_sex, cluster_status, cluster_region, cluster_community, cluster_age, cluster_occupation, cluster_group, cluster_subtype)
       
     } else {if (nrow(list[[i]]) == 5){
+      
+      cluster_size <- nrow(list[[i]])
       
       cluster_sex <- ifelse(list[[i]]$Gender[1] == list[[i]]$Gender[2] & 
                               list[[i]]$Gender[1] == list[[i]]$Gender[3] & 
@@ -433,7 +439,7 @@ characterise.clusters <- function(x){
                                                               list[[i]]$REGA_subtype[1] == "A1,D", "A1,D cluster",
                                                             "Other recombinant cluster")))))
       
-      cluster[[i]] <- data.frame(cluster_sex, cluster_status, cluster_region, cluster_community, cluster_age, cluster_occupation, cluster_group, cluster_subtype)
+      cluster[[i]] <- data.frame(cluster_size, cluster_sex, cluster_status, cluster_region, cluster_community, cluster_age, cluster_occupation, cluster_group, cluster_subtype)
     }}}
       "Cluster larger than n = 5"
     }
@@ -451,15 +457,15 @@ gag_trim_1.5_clusters <- characterise.clusters(GAG_trim_1.5)
 
 # POL
 pol_1.5_summary <- data.frame(matrix(unlist(pol_1.5_clusters), nrow=length(pol_1.5_clusters), byrow=T))
-colnames(pol_1.5_summary) <- c("cluster_sex", "cluster_status", "cluster_region", "cluster_community", "cluster_age", "cluster_occupation", "cluster_group", "cluster_subtype")
+colnames(pol_1.5_summary) <- c("cluster_size", "cluster_sex", "cluster_status", "cluster_region", "cluster_community", "cluster_age", "cluster_occupation", "cluster_group", "cluster_subtype")
 
 # GAG
 gag_1.5_summary <- data.frame(matrix(unlist(gag_1.5_clusters), nrow=length(gag_1.5_clusters), byrow=T))
-colnames(gag_1.5_summary) <- c("cluster_sex", "cluster_status", "cluster_region", "cluster_community", "cluster_age", "cluster_occupation", "cluster_group", "cluster_subtype")
+colnames(gag_1.5_summary) <- c("cluster_size", "cluster_sex", "cluster_status", "cluster_region", "cluster_community", "cluster_age", "cluster_occupation", "cluster_group", "cluster_subtype")
 
-# GG_trim
+# GAG_trim
 gag_trim_1.5_summary <- data.frame(matrix(unlist(gag_trim_1.5_clusters), nrow=length(gag_trim_1.5_clusters), byrow=T))
-colnames(gag_trim_1.5_summary) <- c("cluster_sex", "cluster_status", "cluster_region", "cluster_community", "cluster_age", "cluster_occupation", "cluster_group", "cluster_subtype")
+colnames(gag_trim_1.5_summary) <- c("cluster_size", "cluster_sex", "cluster_status", "cluster_region", "cluster_community", "cluster_age", "cluster_occupation", "cluster_group", "cluster_subtype")
 
 # Add the cluster numbers according to the 4.5% GD clusters, for comparison
 
@@ -468,7 +474,7 @@ numbers_in_pol_4.5 <- unique(POL_1.5_with_4.5$POL_4.5_Cluster)
 numbers_in_pol_4.5 <- sort(numbers_in_pol_4.5)
 
 pol_1.5_summary$`4.5_ID` <- numbers_in_pol_4.5
-pol_1.5_summary <- pol_1.5_summary[, c(9, 1:8)]
+pol_1.5_summary <- pol_1.5_summary[, c(10, 1:9)]
 
 # GAG
 numbers_in_gag_4.5 <- unique(GAG_1.5_with_4.5$GAG_4.5_Cluster)
@@ -477,7 +483,7 @@ numbers_in_gag_4.5 <- replace(numbers_in_gag_4.5, c(15, 16), numbers_in_gag_4.5[
 # we need to do the above replacement as the numbers aren't in order
 
 gag_1.5_summary$`4.5_ID` <- numbers_in_gag_4.5
-gag_1.5_summary <- gag_1.5_summary[, c(9, 1:8)]
+gag_1.5_summary <- gag_1.5_summary[, c(10, 1:9)]
 
 # GAG_trim
 numbers_in_gag_trim_4.5 <- unique(GAG_trim_1.5_with_4.5$GAG_trim_4.5_Cluster)
@@ -486,7 +492,7 @@ numbers_in_gag_trim_4.5 <- replace(numbers_in_gag_trim_4.5, c(10, 11), numbers_i
 # we need to do the above replacement as the numbers aren't in order
 
 gag_trim_1.5_summary$`4.5_ID` <- numbers_in_gag_trim_4.5
-gag_trim_1.5_summary <- gag_trim_1.5_summary[, c(9, 1:8)]
+gag_trim_1.5_summary <- gag_trim_1.5_summary[, c(10, 1:9)]
 
 
 #### For 4.5% GD Clusters ####
@@ -499,22 +505,25 @@ gag_trim_4.5_clusters <- characterise.clusters(GAG_trim_4.5)
 
 # POL
 pol_4.5_summary <- data.frame(matrix(unlist(pol_4.5_clusters), nrow=length(pol_4.5_clusters), byrow=T))
-colnames(pol_4.5_summary) <- c("cluster_sex", "cluster_status", "cluster_region", "cluster_community", "cluster_age", "cluster_occupation", "cluster_group", "cluster_subtype")
+colnames(pol_4.5_summary) <- c("cluster_size", "cluster_sex", "cluster_status", "cluster_region", "cluster_community", "cluster_age", "cluster_occupation", "cluster_group", "cluster_subtype")
 
 # GAG
 gag_4.5_summary <- data.frame(matrix(unlist(gag_4.5_clusters), nrow=length(gag_4.5_clusters), byrow=T))
-colnames(gag_4.5_summary) <- c("cluster_sex", "cluster_status", "cluster_region", "cluster_community", "cluster_age", "cluster_occupation", "cluster_group", "cluster_subtype")
+colnames(gag_4.5_summary) <- c("cluster_size", "cluster_sex", "cluster_status", "cluster_region", "cluster_community", "cluster_age", "cluster_occupation", "cluster_group", "cluster_subtype")
 
 # GG_trim
 gag_trim_4.5_summary <- data.frame(matrix(unlist(gag_trim_4.5_clusters), nrow=length(gag_trim_4.5_clusters), byrow=T))
-colnames(gag_trim_4.5_summary) <- c("cluster_sex", "cluster_status", "cluster_region", "cluster_community", "cluster_age", "cluster_occupation", "cluster_group", "cluster_subtype")
+colnames(gag_trim_4.5_summary) <- c("cluster_size", "cluster_sex", "cluster_status", "cluster_region", "cluster_community", "cluster_age", "cluster_occupation", "cluster_group", "cluster_subtype")
 
 
 # Write out ----
+
+# Without the row names (using 4.5% GD IDs)
 write_csv(pol_1.5_summary, "POL_1.5_clusters.csv")
 write_csv(gag_1.5_summary, "GAG_1.5_clusters.csv")
 write_csv(gag_trim_1.5_summary, "GAG_trim_1.5_clusters.csv")
 
-write_csv(pol_4.5_summary, "POL_4.5_clusters.csv")
-write_csv(gag_4.5_summary, "GAG_4.5_clusters.csv")
-write_csv(gag_trim_4.5_summary, "GAG_trim_4.5_clusters.csv")
+# With the row names (they are the 4.5% GD IDs)
+write.csv(pol_4.5_summary, "POL_4.5_clusters.csv")
+write.csv(gag_4.5_summary, "GAG_4.5_clusters.csv")
+write.csv(gag_trim_4.5_summary, "GAG_trim_4.5_clusters.csv")
